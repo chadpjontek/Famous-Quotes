@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron mt-5">
+			<h1 class="display-4 text-center"><i class="fa fa-quote-left" aria-hidden="true"></i><span id="quote-content"> Hello, world! </span><i class="fa fa-quote-right" aria-hidden="true"></i></h1>
+			<p id="quote-source" class="lead text-center">- Chad Pjontek</p>
+			<hr class="my-4">
+			<p class="lead text-center pt-4">
+				<a id="getQuote" class="btn btn-primary btn-lg" href="#" role="button">Next Quote</a>
+				<a id="tweetQuote" class="btn btn-primary btn-lg" href="#"><i class="fa fa-twitter" aria-hidden="true"></i>
+				Quote!</a>
+			</p>
+		</div>
+	</div>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+	src="https://code.jquery.com/jquery-3.2.1.min.js"
+	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	<!-- My script -->
+	<script type="text/javascript">
+		//set global vars
+		var quoteContent = "Hello World!";
+		var quoteSource = "Chad Pjontek";
+		var tweetTxt = '"' + quoteContent + '" - ' + quoteSource;
+		var twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(tweetTxt);
+		// when user clicks "Next Quote" button, grab a random quote
+		$("#getQuote").on("click", function(){
+			$.ajax({
+				url: 'https://andruxnet-random-famous-quotes.p.mashape.com/?cat=famous',
+				type: 'GET',
+				datatype: 'json',
+				success: function(data) { $("#quote-content").html(" " + data.quote + " ");
+				$("#quote-source").html("<em>-" + data.author + "</em>");
+				quoteContent = data.quote;
+				quoteSource = data.author;
+				tweetTxt = '"' + quoteContent + '" - ' + quoteSource; },
+				error: function(err) { console.log(err); },
+				beforeSend: function(xhr) {
+    xhr.setRequestHeader("X-Mashape-Authorization", "zxwTGt9Oc3mshMH7cWHFO5GAPOGSp17LmMijsnQbcDH7rvmn5C"); // Mashape key
+}
+});
+		});
+		// when user clicks "Tweet Quote", tweet quote!
+		$("#tweetQuote").on("click", function(){
+			if (tweetTxt.length > 140) {
+				alert('Tweet should be less than 140 Chars');
+			}
+			else {
+				twtLink = 'http://twitter.com/home?status=' +encodeURIComponent(tweetTxt);
+				window.open(twtLink,'_blank');
+			}
+		});
+	</script>
+</body>
+</html>
